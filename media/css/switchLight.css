@@ -1,0 +1,33 @@
+body { 
+background:#3B4D61 ;
+ }
+#error{
+    display:none;
+    color:red;
+}
+#switch {
+	position:absolute;
+	bottom:10px;
+	width:80px;
+	height:120px;
+	background:url(../images/light-switch.png) -80px 0 no-repeat;
+	cursor:pointer;
+	z-index:100;
+}
+
+#light-bulb {
+	position:absolute;
+	top:10px;
+	width:150px;
+    right:10px;
+	height:150px;
+	background:url(../images/lightbulb.png) -150px 0 no-repeat;
+	cursor:move;
+	z-index:800;
+}
+#light-bulb2 {
+	width:150px;
+	height:150px;
+	display:none;
+	background:url(../images/lightbulb.png) 0 0 no-repeat;
+}

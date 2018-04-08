@@ -1,0 +1,21 @@
+<html>
+<head>
+    <title>Tornado Boilerplate</title>
+    <script src="{{ static_url("js/jquery-3.1.1.min.js") }}">
+    </script>
+    <script>
+$(document).ready(function(){
+    $("p").click(function(){
+        $(this).hide();
+    });
+});
+    </script>
+</head>
+
+<body>
+    <h1>It worked!</h1>
+    <p>如果您点击我，我会消失!</p>
+    <p>点击我，我会消失!</p>
+    <p>也要点击我哦。</p>
+</body>
+</html>

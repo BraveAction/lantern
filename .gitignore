@@ -1,0 +1,7 @@
+bolierplate_README.md
+*.pyc
+*.zip
+pi-dashboard/
+requirements/
+vendor/
+

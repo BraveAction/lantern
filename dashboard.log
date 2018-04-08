@@ -1,0 +1,107 @@
+[I 180120 01:36:35 base:158] Scheduler started
+[I 180120 01:36:38 index:20] indexHandler
+[W 180120 01:36:38 index:21] indexHandler
+[E 180120 01:36:38 index:23] indexHandler
+[I 180120 01:37:04 index:20] indexHandler
+[W 180120 01:37:04 index:21] indexHandler
+[E 180120 01:37:04 index:23] indexHandler
+[I 180120 01:38:51 index:20] indexHandler
+[W 180120 01:38:51 index:21] indexHandler
+[E 180120 01:38:51 index:23] indexHandler
+[I 180120 01:39:07 index:20] indexHandler
+[W 180120 01:39:07 index:21] indexHandler
+[E 180120 01:39:07 index:23] indexHandler
+[I 180120 01:41:56 index:20] indexHandler
+[W 180120 01:41:56 index:21] indexHandler
+[E 180120 01:41:56 index:23] indexHandler
+[I 180120 01:42:12 index:20] indexHandler
+[W 180120 01:42:12 index:21] indexHandler
+[E 180120 01:42:12 index:23] indexHandler
+[I 180120 11:24:48 app:31] clear GPIO and scheduler
+[I 180120 11:24:48 base:189] Scheduler has been shut down
+[I 180120 11:28:02 base:158] Scheduler started
+[I 180120 11:28:08 app:31] GPIO cleanup and Scheduler remove all jobs
+[I 180120 11:28:08 base:189] Scheduler has been shut down
+[I 180120 11:29:28 base:158] Scheduler started
+[I 180120 11:29:59 index:20] indexHandler
+[W 180120 11:29:59 index:21] indexHandler
+[E 180120 11:29:59 index:23] indexHandler
+[I 180120 11:31:04 base:158] Scheduler started
+[I 180120 11:35:44 base:158] Scheduler started
+[I 180120 11:41:46 base:158] Scheduler started
+[I 180120 11:42:52 lantern:21] channel default value is 0 
+[I 180120 11:42:52 lantern:50] action is switch 
+[I 180120 11:43:12 lantern:21] channel default value is 0 
+[I 180120 11:43:12 lantern:50] action is switch 
+[I 180120 11:45:53 lantern:21] channel default value is 0 
+[I 180120 11:45:53 lantern:50] action is switch 
+[I 180120 11:49:39 lantern:21] channel default value is 0 
+[I 180120 11:49:39 lantern:50] action is switch 
+[I 180120 11:51:33 lantern:21] channel default value is 0 
+[I 180120 11:51:33 lantern:50] action is switch 
+[I 180120 12:25:07 lantern:21] channel default value is 0 
+[I 180120 12:25:07 lantern:50] action is list 
+[I 180120 17:38:22 lantern:21] channel default value is 0 
+[I 180120 17:38:22 lantern:50] action is switch 
+[I 180121 11:46:38 lantern:21] channel default value is 0 
+[I 180121 11:46:38 lantern:50] action is switch 
+[I 180121 11:47:02 lantern:21] channel default value is 0 
+[I 180121 11:47:02 lantern:50] action is switch 
+[I 180121 11:47:08 lantern:21] channel default value is 0 
+[I 180121 11:47:08 lantern:50] action is switch 
+[I 180121 11:47:33 lantern:21] channel default value is 0 
+[I 180121 11:47:33 lantern:50] action is switch 
+[I 180121 11:49:45 lantern:21] channel default value is 0 
+[I 180121 11:49:45 lantern:50] action is switch 
+[I 180121 11:51:07 lantern:21] channel default value is 0 
+[I 180121 11:51:07 lantern:50] action is switch 
+[I 180121 11:52:21 lantern:21] channel default value is 0 
+[I 180121 11:52:21 lantern:50] action is switch 
+[I 180121 11:55:09 lantern:21] channel default value is 0 
+[I 180121 11:55:09 lantern:50] action is switch 
+[I 180121 11:55:16 lantern:21] channel default value is 0 
+[I 180121 11:55:16 lantern:50] action is switch 
+[I 180121 11:56:40 lantern:21] channel default value is 0 
+[I 180121 11:56:40 lantern:50] action is switch 
+[I 180121 11:57:10 lantern:21] channel default value is 0 
+[I 180121 11:57:10 lantern:50] action is switch 
+[I 180121 11:57:45 lantern:21] channel default value is 0 
+[I 180121 11:57:45 lantern:50] action is switch 
+[I 180121 11:58:00 lantern:21] channel default value is 0 
+[I 180121 11:58:00 lantern:50] action is switch 
+[I 180121 11:58:17 lantern:21] channel default value is 0 
+[I 180121 11:58:17 lantern:50] action is switch 
+[I 180121 12:01:28 lantern:21] channel default value is 0 
+[I 180121 12:01:28 lantern:50] action is switch 
+[I 180121 12:01:34 lantern:21] channel default value is 0 
+[I 180121 12:01:34 lantern:50] action is switch 
+[I 180121 12:01:39 lantern:21] channel default value is 0 
+[I 180121 12:01:39 lantern:50] action is switch 
+[I 180121 12:12:07 lantern:21] channel default value is 0 
+[I 180121 12:12:07 lantern:50] action is switch 
+[I 180121 12:13:10 lantern:21] channel default value is 0 
+[I 180121 12:13:10 lantern:50] action is switch 
+[I 180121 12:15:35 lantern:21] channel default value is 0 
+[I 180121 12:15:35 lantern:50] action is switch 
+[I 180121 12:15:41 lantern:21] channel default value is 0 
+[I 180121 12:15:41 lantern:50] action is switch 
+[I 180121 12:16:21 lantern:21] channel default value is 0 
+[I 180121 12:16:21 lantern:50] action is switch 
+[I 180121 12:16:24 lantern:21] channel default value is 0 
+[I 180121 12:16:24 lantern:50] action is switch 
+[I 180121 12:16:26 lantern:21] channel default value is 0 
+[I 180121 12:16:26 lantern:50] action is switch 
+[I 180121 12:18:47 lantern:21] channel default value is 0 
+[I 180121 12:18:47 lantern:50] action is switch 
+[I 180121 12:58:07 lantern:21] channel default value is 0 
+[I 180121 12:58:07 lantern:50] action is switch 
+[I 180121 12:59:27 lantern:21] channel default value is 0 
+[I 180121 12:59:27 lantern:50] action is switch 
+[I 180121 16:28:35 base:158] Scheduler started
+[I 180121 17:49:24 lantern:21] channel default value is 0 
+[I 180121 17:49:24 lantern:50] action is swithc 
+[E 180121 17:49:24 lantern:73] invalid action
+[I 180121 17:49:30 lantern:21] channel default value is 0 
+[I 180121 17:49:30 lantern:50] action is switch 
+[I 180121 17:49:33 lantern:21] channel default value is 0 
+[I 180121 17:49:33 lantern:50] action is switch 

@@ -1,0 +1,24 @@
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>彩灯</title>
+    <link rel="shortcut icon" href="{{ static_url("images/favicon.ico") }}" type="image/x-icon" />
+    <link  href="{{ static_url("css/bootstrap.min.css") }}" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{{ static_url("css/switchLight.css") }}" media="all" />
+
+    <script src="{{ static_url("js/jquery-3.1.1.min.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/jquery-ui.min.js") }}"></script>
+    <script type="text/javascript" src="{{ static_url("js/lantern/switchLight.js") }}"></script>
+    <script>
+    var lanternState={{ lanternState }};
+    </script>
+
+</head>
+<body>
+    <p id="error">请求失败</p>
+    <div id="switch"></div>
+    <div id="light-bulb" class="off"><div id="light-bulb2"></div></div>
+</body>
+
+</html>

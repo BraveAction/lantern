@@ -1,0 +1,68 @@
+#error{
+    display:none;
+    color:red;
+}
+#light-bulb {
+	margin-top:5px;
+	width:64px;
+    right:10px;
+	height:64px;
+	background:url(../images/light.png) -64px 0 no-repeat;
+	cursor:move;
+	z-index:800;
+}
+#light-bulb2 {
+	width:64px;
+	height:64px;
+	display:none;
+	background:url(../images/light.png) 0 0 no-repeat;
+}
+.cron {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    height: 2rem;
+    width:5rem;
+    font-size: 1rem;
+    text-align:center;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    box-sizing: content-box;
+    transition: all 0.3s;
+}
+.cron-content {
+    height:2rem;
+    margin:0px;
+    text-align:center;
+}
+.cron-new {
+    border-bottom: 1px solid green;
+}
+input[type="cron-new"] {
+    border-bottom: 1px solid green;
+}
+input[type="cron-edit"] {
+    border-bottom: 1px solid #9e9e9e;
+}
+.action-edit {
+    color:#039be5;
+}
+.action-delete {
+    color:#c8e6c9;
+}
+.action-save{
+    color:green;
+}
+.action-close{
+    color:red;
+}
+#datepicker_none {
+    width:100px;
+    text-align:center;
+    margin:0px;
+}
+.task-date-show {
+    width:6rem;
+    height:3rem;
+}

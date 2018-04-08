@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<htm>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>lantern_md</title>
+        <link rel="shortcut icon" href="{{ static_url("images/favicon.ico") }}" type="image/x-icon" />
+        <link href="{{ static_url("css/materialIcons.css") }}" rel="stylesheet">
+        <link rel="stylesheet" href="{{ static_url("css/materialize.min.css") }}">
+        <link rel="stylesheet" href="{{ static_url("css/jquery-ui.min.css") }}">
+        <link rel="stylesheet" href="{{ static_url("css/jquery-clockpicker.min.css") }}">
+        <link type="text/css" rel="stylesheet" href="{{ static_url("css/lantern_md.css") }}" media="all" />
+        <script type="text/javascript" src="{{ static_url("js/jquery-3.1.1.min.js") }}"></script>
+        <script src="{{ static_url("js/materialize.min.js") }}"></script>
+        <script src="{{ static_url("js/jquery-ui.min.js") }}"></script>
+        <script src="{{ static_url("js/jquery-clockpicker.min.js") }}"></script>
+        <script src="{{ static_url("js/lantern/lantern_md.js") }}"></script>
+        <!--
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
+            <script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>
+            <script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js"></script>
+            <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+            -->
+            <script>
+var lanternState={{ lanternState }};
+            </script>
+    </head>
+    <body>
+        <div class="container">
+            <nav>
+                <div class="nav-wrapper teal darken-2">
+                    <a href="#!" class="brand-logo" style="left:2.5rem">
+                        <i class="material-icons">
+                            <!-- <img src="{{ static_url("images/light.png") }}" />-->
+                            <div id="light-bulb" class="off"><div id="light-bulb2"></div></div>
+                        </i>
+                    </a>
+                    <a href="#" data-activates="mobile-demo" class="right button-collapse"><i class="material-icons">menu</i></a>
+                    <ul class="right hide-on-med-and-down">
+                        <li><a href="javascript:;" onclick="insert()"><i class="material-icons">add</i></a></li>
+                        <li><a href="collapsible.html"><i class="material-icons">refresh</i></a></li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="card-panel  orange accent-3" style="margin-top: 0rem;">
+                <div class="row">
+                    <div class="col s12 lighten-2">
+                        <table class="bordered centered">
+                            <thead>
+                                <tr>
+                                    <th data-field="name">日期</th>
+                                    <th data-field="name">时间</th>
+                                    <th data-field="name">开关</th>
+                                    <th data-field="name">状态</th>
+                                    <th data-field="name">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lanternScheduler">
+                            {% if len(lanternTasks) > 0 %}
+                                {% for lanternTask in lanternTasks %}
+                                <tr>
+                                    <script>
+console.log({{ lanternTask.trigger.fields}} );
+console.log({{ lanternTask}} );
+                                    </script>
+                                    <td name="taskDate" >{{ str("%s-%s-%s" %(lanternTask.trigger.fields[0] ,lanternTask.trigger.fields[1] ,lanternTask.trigger.fields[2])) }}</td>
+                                    <td name="taskTime" class="task-date-show">{{ str("%s:%s:%s" %(lanternTask.trigger.fields[5] ,lanternTask.trigger.fields[6] ,lanternTask.trigger.fields[7])) }}
+                                    </td>
+                                    <td>
+                                        <div class="switch">
+                                            <label>
+                                                <input type="checkbox"  value="{{ int("%d" % lanternTask.args) }}" {% if int("%d" % lanternTask.args) == 1 %} checked="checked" {% end %} disabled="disabled" />
+                                                <span class="lever" ></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>?</td>
+                                    <td>
+                                        <div style=";text-align:center;;height:auto;"> 
+                                            <a href="javascript:;"  class="action-edit" onclick="triggerEditMode(this,true)">
+                                                <i class="material-icons">edit</i>
+                                            </a>
+                                            <a href="javascript:;" class="action-delete" onclick="deleteLanternTaskById(this,'{{ lanternTask.id }}')">
+                                                <i class="material-icons">delete</i>
+                                            </a>
+                                        </div>
+                                        <div style=";text-align:center;;height:auto;display: none;"> 
+                                            <i class="material-icons">done</i>
+                                            <a href="javascript:;" class="action-close" onclick="triggerEditMode(this,false)">
+                                                <i class="material-icons">close</i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% end %}
+                            {% end %}
+                {% if len(lanternTasks) == 0 %}
+                <tr name='defNothingTr'><td></td><td></td><td>nothing</td><td></td><td></td></tr>
+                {% end %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{{ static_url("js/lantern/lantern.js") }}"></script>
+    </body>
+</html>
