@@ -1,8 +1,9 @@
+# -*- coding: UTF-8 -*-
 import json
 import tornado.web
 
 import logging
-logger = logging.getLogger('boilerplate.' + __name__)
+logger = logging.getLogger('dashboard.' + __name__)
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -44,6 +45,8 @@ class BaseHandler(tornado.web.RequestHandler):
         logger.debug("Found '%s': %s in JSON arguments" % (name, arg))
         return arg
 
+
+    '''使用属性的方式调用方法'''
     @property
     def scheduler(self):
         return self.application.scheduler
