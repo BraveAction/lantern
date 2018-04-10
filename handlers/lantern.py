@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from handlers.base import BaseHandler
 from datetime import datetime
 import tornado.web
@@ -14,44 +15,34 @@ channel1=24
 NO=1
 OFF=0
 
-def obj2dict(x):
-    if hasattr(x, '__dict__'):
-        return vars(x)
-    else:
-        ret = {slot: getattr(x, slot) for slot in x.__slots__}
-        for cls in type(x).mro():
-            spr = super(cls, x)
-            if not hasattr(spr, '__slots__'):
-                break
-            for slot in spr.__slots__:
-                ret[slot] = getattr(x, slot)
-        return ret
 
 class LanternHandler(BaseHandler):
     def __init__(self,application,request,**kwargs):
         super(LanternHandler,self).__init__(application,request,**kwargs)
         GPIO=self.GPIO
         try:
-            #GPIO.setup(channel,GPIO.OUT,initial=GPIO.LOW)
             GPIO.setup(channel,GPIO.OUT)
             GPIO.setup(channel1,GPIO.OUT)
             logging.info("channel default value is %d " %  GPIO.input(channel))
         except RuntimeError:
+            '''GPIO可能未初始化'''
             logging.warning("GPIO no mode")
             GPIO.setwarnings(False) 
             GPIO.setmode(GPIO.BCM)
             GPIO.setup(channel,GPIO.OUT)
             GPIO.setup(channel1,GPIO.OUT)
 
+    '''设置针脚的状态'''
     def switchLantern(self,switch):
-        self.GPIO.output(channel,switch)
-        self.GPIO.output(channel1,switch)
+        self.switchLanternTask(switch)
         self.write({"lanternState":self.GPIO.input(channel)});
 
+    '''设置针脚状态的调度任务'''
     def switchLanternTask(self,switch):
         self.GPIO.output(channel,switch)
         self.GPIO.output(channel1,switch)
 
+    '''清除针脚状态移除调度器中的所有的任务'''
     def removeJobsClearGPIO(self):
         logging.info("GPIO cleanup and Scheduler remove all jobs")
         self.GPIO.cleanup()
@@ -71,20 +62,17 @@ class LanternHandler(BaseHandler):
         #self.set_header('Content-Type', 'application/json; charset=UTF-8')
 
         action=str(input)
-        logger.info("action is %s " % action)
+        logger.info("action is %s " % action) 
+        
+        if action == "addnew": 
+            obj=self.get_json_argument("dateTime") 
+            fdatetime=datetime.strptime(str("%s %s" % (obj["date"],obj["time"])),"%Y-%m-%d %H:%M") 
 
-        if action == "addnew":
-            obj=self.get_json_argument("dateTime")
-            fdatetime=datetime.strptime(str("%s %s" % (obj["date"],obj["time"])),"%Y-%m-%d %H:%M")
-
-            result=self.scheduler.add_job(self.switchLanternTask, 'cron', year=fdatetime.year, month=fdatetime.month, day=fdatetime.day, hour=fdatetime.hour, minute=fdatetime.minute, args=[int("%s" % obj["flag"])])
-
-            logger.info("%s" % result)
-            logger.info(obj2dict(result))
+            result=self.scheduler.add_job(self.switchLanternTask, 'cron', year=fdatetime.year, month=fdatetime.month, day=fdatetime.day, hour=fdatetime.hour, minute=fdatetime.minute, args=[int("%s" % obj["flag"])]) 
+            logger.info("%s" % result) 
             if result is not None:
-                #self.write(simplejson.dumps(obj2dict(result)))
-                #self.write(json.dumps({'message': True}))
                 self.write(json.dumps({'id':result.id,'args':int('%d' % result.args),'year':str(result.trigger.fields[0]),'month':str(result.trigger.fields[1]),'day':str(result.trigger.fields[2]),'hour':str(result.trigger.fields[5]),'minute':str(result.trigger.fields[6]),'second':str(result.trigger.fields[7])}))
+
 
     def get(self,input):
         action=str(input)
