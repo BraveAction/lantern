@@ -8,8 +8,6 @@ from tornado.options import options
 import signal
 import logging
 
-
-
 from settings import settings
 from urls import url_patterns
 

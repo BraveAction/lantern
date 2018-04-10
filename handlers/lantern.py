@@ -49,27 +49,28 @@ class LanternHandler(BaseHandler):
         self.scheduler.remove_all_jobs()
         self.write("cleanup complete")
 
-    def addJob(self):
-        GPIO=self.GPIO
-        job=self.scheduler.add_job(self.switchLanternTask, 'cron', year=2018, month=1, day='*', hour=21, minute=00,end_date=datetime(2018,1,25,20,59), args=[NO])
-        logging.info("add job info %s :" % job)
-        self.write("channel default value is %d " %  GPIO.input(channel))
-
     def put(self,input):
         self.write("put")
 
+    '''保存定时开关任务'''
     def post(self,input):
-        #self.set_header('Content-Type', 'application/json; charset=UTF-8')
+        '''job=self.scheduler.add_job(self.switchLanternTask, 'cron', year=2018, month=1, day='*', hour=21, minute=00,end_date=datetime(2018,1,25,20,59), args=[NO])'''
 
         action=str(input)
         logger.info("action is %s " % action) 
         
         if action == "addnew": 
+            #获取任务时间
             obj=self.get_json_argument("dateTime") 
+            #格式化任务时间
             fdatetime=datetime.strptime(str("%s %s" % (obj["date"],obj["time"])),"%Y-%m-%d %H:%M") 
 
+            #添加开关任务到调度器
             result=self.scheduler.add_job(self.switchLanternTask, 'cron', year=fdatetime.year, month=fdatetime.month, day=fdatetime.day, hour=fdatetime.hour, minute=fdatetime.minute, args=[int("%s" % obj["flag"])]) 
+
             logger.info("%s" % result) 
+
+            #任务添加成功输出
             if result is not None:
                 self.write(json.dumps({'id':result.id,'args':int('%d' % result.args),'year':str(result.trigger.fields[0]),'month':str(result.trigger.fields[1]),'day':str(result.trigger.fields[2]),'hour':str(result.trigger.fields[5]),'minute':str(result.trigger.fields[6]),'second':str(result.trigger.fields[7])}))
 
@@ -78,23 +79,20 @@ class LanternHandler(BaseHandler):
         action=str(input)
         logger.info("action is %s " % action)
 
+        #任务列表
         if action == "list":
             jobs = self.scheduler.get_jobs()
             self.render("lantern_md.html",lanternTasks = jobs,lanternState=self.GPIO.input(channel))
+        #清空任务列表
         elif action == 'clear':
             self.removeJobsClearGPIO()
+        #更新任务
         elif action == "update":
             logging.info("update jobs")
-        elif action == "add":
-            self.addJob()
+        #开/关
         elif action == "switch":
             self.render("lantern.html",lanternState=self.GPIO.input(channel))
-        elif action == "on":
-            logging.info("open lantern")
-            self.switchLantern(NO)
-        elif action == "off":
-            logging.info("close lantern")
-            self.switchLantern(OFF)
+        #删除开关任务
         elif action == "delete":
             logging.info("delete lantern")
             result=self.scheduler.remove_job(self.get_argument("lanternTaskId"))
@@ -102,10 +100,12 @@ class LanternHandler(BaseHandler):
                 self.write(json.dumps({'message': True}))
             else:
                 self.write(json.dumps({'message': True}))
+        #没有匹配的事件
         else:
             logging.error("invalid action")
             raise Exception("invalid action")
 
+    #向浏览器打印错误日志
     def write_error(self,status_code,**kwargs):
         if 'exc_info' in kwargs:
             error_message=(str(kwargs['exc_info'][1]))
