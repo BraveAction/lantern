@@ -37,6 +37,7 @@ jQuery(function($){
 });
 
 
+//初始化灯饰状态
 function switchLight(){
     var lightbulb=$("#light-bulb");				
     var lightbulb2=$("#light-bulb2");			
@@ -52,22 +53,39 @@ function switchLight(){
 
 function insert(){
     var trs=$("#lanternScheduler").children("tr");
-    //remove default nothing <tr>
+    //移除默认的无数据<tr>
     if(trs.length==1){
         var defNothingTrName=$(trs).first().attr("name");
         if(defNothingTrName == "defNothingTr"){
             $("#lanternScheduler").empty();
         }
     }
-    var nextTrIndex = $("#lanternScheduler").children().length+1;
-    var nextDatepickerId="datepicker"+nextTrIndex;
-    var nextTimepickerId="timepicker"+nextTrIndex;
-    var checked = nextTrIndex % 2 == 0 ? ' value = "0"  ' : ' checked = "checked" value = "1" ';
+    
+    var nextTrIndex = $("#lanternScheduler").children().length+1;//新任务的id
+    var nextDatepickerId="datepicker"+nextTrIndex;//新任务日期组件id
+    var nextTimepickerId="timepicker"+nextTrIndex;//新任务时间组件id
+    var checked = nextTrIndex % 2 == 0 ? ' value = "0"  ' : ' checked = "checked" value = "1" ';//新任务开关组件状态
+    var defaultModeHtml=
+        '<div style=";text-align:center;;height:auto;display:none;">'+ 
+        '<a href="javascript:;"  class="action-edit" onclick="triggerEditMode(this,true)">'+
+        '<i class="material-icons">edit</i>'+
+        '</a>'+
+        '<a href="javascript:;" class="action-delete" onclick="deleteLanternTaskById(this,1)">'+
+        '<i class="material-icons">delete</i>'+
+        '</a>'+
+        '</div>';
+    var editModeHtml=
+        '<div style="text-align:center;height:auto;">'+
+        '   <i name="saveIcon" class="material-icons">done</i>'+
+        '   <a href="javascript:;" class="action-close" onclick="deleteNotInsertRecord(this)">'+
+        '       <i class="material-icons">close</i>'+
+        '</a>'+
+        '</div>';
     var insertHtml= '<tr style="display:none;" id="newTr'+nextTrIndex+'">'+
-        '<td>'+
+        '<td name="taskDate">'+
         '<input type="cron-new" id="'+nextDatepickerId+'" class="cron" name="date">'+
         '</td>'+
-        '<td>'+
+        '<td name="taskTime" class="task-date-show">'+
         '<input id="'+nextTimepickerId+'" type="cron-new" class="cron form-control" name="time" data-placement="bottom" data-align="top" data-autoclose="true">'+
         '</td>'+
         '<td>'+
@@ -81,12 +99,8 @@ function insert(){
         '<td>'+
         '?</td>'+
         '<td>'+ 
-        '<div style="text-align:center;height:auto;">'+
-        '   <i name="saveIcon" class="material-icons">done</i>'+
-        '   <a href="javascript:;" class="action-close" onclick="deleteNotInsertRecord(this)">'+
-        '       <i class="material-icons">close</i>'+
-        '</a>'+
-        '</div>'+
+        defaultModeHtml+
+        editModeHtml+
         '</td>'+
         '</tr>';
     $("tbody").append(insertHtml);
@@ -94,11 +108,11 @@ function insert(){
     
     $("#"+nextDatepickerId).datepicker();
     $("#"+nextDatepickerId).change(function(){
-        updateSaveIcon(this,nextTrIndex,nextTimepickerId);
+        updateSaveIcon(this,editModeHtml,nextTrIndex,nextTimepickerId);
     });
     $("#"+nextTimepickerId).clockpicker();
     $("#"+nextTimepickerId).change(function(){
-        updateSaveIcon(this,nextTrIndex,nextDatepickerId);
+        updateSaveIcon(this,editModeHtml,nextTrIndex,nextDatepickerId);
         });
     
 
@@ -106,18 +120,92 @@ function insert(){
 }
 
 //修改时间日期级联时，触发保存按钮
-function updateSaveIcon(input,trIndex,cascadeId){
+function updateSaveIcon(input,actionDiv,trIndex,cascadeId){
 
-        var saveI=$(input).parent().siblings().last().children("div").children().first();
+        var saveI=$(input).parent().siblings().last().children("div").eq(1).children().first();
+        //var saveI=$(actionDiv).children().first();
         var inputVal=$(input).val();
         var cascadeVal=$("#"+cascadeId).val();
         if( inputVal != '' && cascadeVal != ''){
             //$(saveI).replaceWith('<a href="javascript:;" class="action-save" onclick="save(this)"><i class="material-icons">done</i></a>');
             $(saveI).wrap('<a href="javascript:;" class="action-save" onclick="save(this,'+ trIndex +')"></a>');
         }else{
-            $(saveI).replaceWith('<i class="material-icons">done</i>');
+    //        $(saveI).replaceWith('<i class="material-icons">done</i>');
         }
 
+}
+
+
+//刷新数据
+function refresh(){
+    $("#lanternScheduler").empty();
+    $.ajax({
+        url:"/lantern/refresh",
+        type:"get",
+        timeout:"3000",
+        dataType:"json",
+        success:function(result,status,xhr){
+            if(result.result.length<1){
+                $("#lanternScheduler").append("<tr name='defNothingTr'><td></td><td></td><td>nothing</td><td></td><td></td></tr>");
+            }else{
+                var lanternNodes;
+                $(result.result).each(function(index,lanternTask){
+                    var checkedStat=lanternTask.args==1?'checked="checked"':"";
+                    lanternNodes+='<tr>'+
+                                    '<td name="taskDate" >'+lanternTask.taskDate+'</td>'+
+                                    '<td name="taskTime" class="task-date-show">'+lanternTask.taskTime+'</td>'+
+                                    '<td>'+
+                                        '<div class="switch">'+
+                                            '<label>'+
+                                              '<input type="checkbox"  value="'+lanternTask.args+'" '+checkedStat+' disabled="disabled" />'+
+                                                '<span class="lever" ></span>'+
+                                            '</label>'+
+                                        '</div>'+
+                                    '</td>'+
+                                    '<td>?</td>'+
+                                    '<td>'+
+                                        '<div style=";text-align:center;;height:auto;">'+
+                                            '<a href="javascript:;"  class="action-edit" onclick="triggerEditMode(this,true)">'+
+                                                '<i class="material-icons">edit</i>'+
+                                            '</a>'+
+                                            '<a href="javascript:;" class="action-delete" onclick="deleteLanternTaskById(this,'+lanternTask.id+')">'+
+                                                '<i class="material-icons">delete</i>'+
+                                            '</a>'+
+                                        '</div>'+
+                                        '<div style=";text-align:center;;height:auto;display: none;">'+
+                                            '<i class="material-icons" hiddenId="'+ lanternTask.id +'">done</i>'+
+                                            '<a href="javascript:;" class="action-close" onclick="triggerEditMode(this,false)">'+
+                                                '<i class="material-icons">close</i>'+
+                                            '</a>'+
+                                        '</div>'+
+                                    '</td>'+
+                                '</tr>';
+                });
+            $("#lanternScheduler").append(lanternNodes);
+            }
+        }
+    });
+}
+
+function updateLanterTask(lanternTaskId){
+    $.ajax({
+        url:"/lantern/update?lanternTaskId="+lanternTaskId,
+        type:"put",
+        dataType:"json",
+        timeout:"3000",
+        success:function(result,status,xhr){
+            if(result.message){
+                Materialize.toast('删除成功！', 3000, 'rounded');
+                var tr=$(node).parents("tr").first();
+                $(tr).fadeOut(350,function(){
+                    $(this).remove();
+                });
+            }else{
+                Materialize.toast('删除失败！', 3000, 'rounded');
+            }
+        }
+    });
+    
 }
 
 function deleteLanternTaskById(node,lanternTaskId){
@@ -142,16 +230,22 @@ function deleteLanternTaskById(node,lanternTaskId){
 
 
 function save(node,trIndex){
-    console.log(trIndex);
     var trnode=$(node).parents("tr");
     var inputs=$(trnode).find("input");
     var param='{"dateTime":{';
+    var taskDateVal=null;
+    var taskTimeVal=null;
     $(inputs).each(function(){
         param+='"'+$(this).attr("name")+'":"'+$(this).val()+'"';
         if(inputs.length-1 > inputs.index(this)){
             param+=",";
         }else{
         param+="}}";
+        }
+        if($(this).attr("name")=="date"){
+            taskDateVal=$(this).val();
+        }else  if($(this).attr("name")=="time"){
+            taskTimeVal=$(this).val();
         }
     });
     
@@ -163,9 +257,13 @@ function save(node,trIndex){
         contentType:'application/json;charset=utf-8',
         timeout:"3000",
         success:function(result,status,xhr){ if(result.id != null){
+                var closeNode=$(node).siblings()[0];
                 Materialize.toast('保存成功！', 3000, 'rounded');
-                console.log(result.id);
-                triggerEditMode($(node,false));
+                $(inputs[0]).replaceWith(taskDateVal);
+                $(inputs[1]).replaceWith(taskTimeVal);
+                triggerEditMode($(node),false,"'"+result.id+"'");
+                $(closeNode).attr("onclick","triggerEditMode(this,false)");
+                $(node).replaceWith('<i class="material-icons" hiddenId="'+result.id+'" >done</i>');
             }else{
                 Materialize.toast('保存失败！', 3000, 'rounded');
             console.log(result);
@@ -187,13 +285,16 @@ function onChange(saveDiv,oldValue,newValue){
 
     var saveI=$(saveDiv).children().first();
     if(oldValue==newValue){
-        $(saveI).replaceWith('<i class="material-icons">done</i>');
+     //   $(saveI).replaceWith('<i class="material-icons">done</i>');
     }else{
-        $(saveI).replaceWith('<a href="javascript:;" class="action-save" onclick="save(this)"><i class="material-icons">done</i></a>');
+        //$(saveI).replaceWith('<a href="javascript:;" class="action-save" onclick="save(this)"><i class="material-icons">done</i></a>');
+        $(saveI).wrap('<a href="javascript:;" class="action-save" onclick="save(this)"></a>');
     }
 }
 
-function triggerEditMode(node,flag){
+
+
+function triggerEditMode(node,flag,id){
     var trs=$("#lanternScheduler").children('tr');
     var selTaskIndex=trs.index($(node).parents('tr').first());
     var editDiv;
@@ -244,6 +345,12 @@ function triggerEditMode(node,flag){
 
         $(tdDate).html(inputDateValue); 
         $(tdTime).html(inputTimeValue); 
+       
+        if(id != null){
+            console.log('id');
+            var delNode=$(editDiv).find("a").last();
+            $(delNode).replaceWith( '<a href="javascript:;" class="action-delete" onclick="deleteLanternTaskById(this,'+id+')"><i class="material-icons">delete</i></a>');
+        }
     }
 }
 

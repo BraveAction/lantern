@@ -83,12 +83,25 @@ class LanternHandler(BaseHandler):
         if action == "list":
             jobs = self.scheduler.get_jobs()
             self.render("lantern_md.html",lanternTasks = jobs,lanternState=self.GPIO.input(channel))
+        #获取job数据，并格式化
+        elif action == "refresh":
+            jobs=self.scheduler.get_jobs()
+            lanterns=[]
+            for job in jobs:
+                lantern={"id":job.id,"taskDate":str("%s-%s-%s" %(job.trigger.fields[0] ,job.trigger.fields[1] ,job.trigger.fields[2])),"taskTime": str("%s:%s:%s" %(job.trigger.fields[5] ,job.trigger.fields[6] ,job.trigger.fields[7])),"args":int("%d" %job.args)} 
+                lanterns.append(lantern)
+            self.write(json.dumps({"result":lanterns}));
         #清空任务列表
         elif action == 'clear':
             self.removeJobsClearGPIO()
         #更新任务
         elif action == "update":
             logging.info("update jobs")
+            result=self.scheduler.reschedule_job(self.get_argument("lanternTaskId"),trigger='cron',hour=16)
+            if result is None:
+                self.write(json.dumps({'message': False}))
+            else:
+                self.write(json.dumps({'message': True}))
         #开/关
         elif action == "switch":
             self.render("lantern.html",lanternState=self.GPIO.input(channel))
@@ -99,7 +112,7 @@ class LanternHandler(BaseHandler):
             if result is None:
                 self.write(json.dumps({'message': True}))
             else:
-                self.write(json.dumps({'message': True}))
+                self.write(json.dumps({'message': False}))
         #没有匹配的事件
         else:
             logging.error("invalid action")

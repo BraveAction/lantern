@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<htm>
+<html>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -38,7 +38,7 @@ var lanternState={{ lanternState }};
                     <a href="#" data-activates="mobile-demo" class="right button-collapse"><i class="material-icons">menu</i></a>
                     <ul class="right hide-on-med-and-down">
                         <li><a href="javascript:;" onclick="insert()"><i class="material-icons">add</i></a></li>
-                        <li><a href="collapsible.html"><i class="material-icons">refresh</i></a></li>
+                        <li><a href="javascript:;" onclick="refresh()"><i class="material-icons">refresh</i></a></li>
                     </ul>
                 </div>
             </nav>
@@ -56,13 +56,9 @@ var lanternState={{ lanternState }};
                                 </tr>
                             </thead>
                             <tbody id="lanternScheduler">
-                            {% if len(lanternTasks) > 0 %}
+                                {% if len(lanternTasks) > 0 %}
                                 {% for lanternTask in lanternTasks %}
                                 <tr>
-                                    <script>
-console.log({{ lanternTask.trigger.fields}} );
-console.log({{ lanternTask}} );
-                                    </script>
                                     <td name="taskDate" >{{ str("%s-%s-%s" %(lanternTask.trigger.fields[0] ,lanternTask.trigger.fields[1] ,lanternTask.trigger.fields[2])) }}</td>
                                     <td name="taskTime" class="task-date-show">{{ str("%s:%s:%s" %(lanternTask.trigger.fields[5] ,lanternTask.trigger.fields[6] ,lanternTask.trigger.fields[7])) }}
                                     </td>
@@ -85,7 +81,7 @@ console.log({{ lanternTask}} );
                                             </a>
                                         </div>
                                         <div style=";text-align:center;;height:auto;display: none;"> 
-                                            <i class="material-icons">done</i>
+                                            <i class="material-icons" hiddenId="{{ lanternTask.id }}">done</i>
                                             <a href="javascript:;" class="action-close" onclick="triggerEditMode(this,false)">
                                                 <i class="material-icons">close</i>
                                             </a>
@@ -93,10 +89,10 @@ console.log({{ lanternTask}} );
                                     </td>
                                 </tr>
                                 {% end %}
-                            {% end %}
-                {% if len(lanternTasks) == 0 %}
-                <tr name='defNothingTr'><td></td><td></td><td>nothing</td><td></td><td></td></tr>
-                {% end %}
+                                {% end %}
+                                {% if len(lanternTasks) == 0 %}
+                                <tr name='defNothingTr'><td></td><td></td><td>nothing</td><td></td><td></td></tr>
+                                {% end %}
                             </tbody>
                         </table>
                     </div>
